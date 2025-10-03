@@ -43,7 +43,7 @@ RUN apt-get install -y qemu-system-arm qemu
 RUN apt-get install -y rsync
 RUN apt-get install -y git
 
-ADD entrypoint.sh /entrypoint.sh
+#ADD entrypoint.sh /entrypoint.sh
 RUN echo "set number" >> /root/.vimrc
 RUN echo "set laststatus=2" >> /root/.vimrc
 RUN echo "filetype plugin indent on" >> /root/.vimrc
@@ -56,7 +56,7 @@ RUN mkdir -p /root/.ssh
 
 COPY id_ed25519 /root/.ssh/id_ed25519
 
-RUN chmod +x /entrypoint.sh
+# RUN chmod +x /entrypoint.sh
 
 
 RUN apt-get install -y sshpass
@@ -109,6 +109,10 @@ RUN cat /known_hosts >> /home/bitbake/.ssh/known_hosts
 
 RUN mkdir -p /root/.ssh
 RUN cat /known_hosts >> /root/.ssh/known_hosts
+
+ADD entrypoint.sh /entrypoint.sh
+
+RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
 

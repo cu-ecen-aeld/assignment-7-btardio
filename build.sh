@@ -5,6 +5,19 @@
 
 ln -s ext-tree base_external
 
+LINE_TO_APPEND="sha256  01be32c9f2a1a48fffe81c1992ce6cea6bba7ebe5cb574533fd6d608d864e050  linux-5.15.19.tar.xz"
+
+HASHFILE="buildroot/linux/linux.hash"
+
+grep -qF -- "$LINE_TO_APPEND" "$HASHFILE" || echo "$LINE_TO_APPEND" >> "$HASHFILE"
+
+# this patch is erroring
+mv buildroot/board/qemu/patches/linux/0002-powerpc-boot-Fix-build-with-gcc-15.patch ./
+
+# this patch could be erroring
+
+# mv buildroot/board/qemu/patches/linux/0001-mips-Add-std-flag-specified-in-KBUILD_CFLAGS-to-vdso.patch ./
+
 source shared.sh
 
 EXTERNAL_REL_BUILDROOT=../base_external
@@ -35,9 +48,10 @@ fi
 PATH=$PATH:$(pwd)/arm-gnu-toolchain-14.2.rel1-x86_64-aarch64-none-linux-gnu/bin/
 export PATH
 ARCH=arm64
-CONFIG_DIR=$(pwd)/base_external/package/aesd-assignments/
-export CONFIG_DIR
-BR2_EXTERNAL=$(pwd)/base_external/package/aesd-assignments/
+# CONFIG_DIR=$(pwd)/base_external/package/aesd-assignments/
+# export CONFIG_DIR
+BR2_EXTERNAL=$(pwd)/base_external/
+#package/aesd-assignments/
 export BR2_EXTERNAL
 BR2_DEFCONFIG=$(pwd)/base_external/company/virt/qemu_aarch64_virt_defconfig
 export BR2_DEFCONFIG
@@ -57,6 +71,7 @@ if [ ! -f ./Image ]; then
     cp /tmp/aeld/linux-stable/arch/${ARCH}/boot/Image ${MYDIR}
 fi
 
+# rm -r buildroot/package/ncurses/
 
 make -C buildroot -j73
 
@@ -88,6 +103,6 @@ then
 else
 	echo "USING EXISTING BUILDROOT CONFIG"
 	echo "To force update, delete .config or make changes using make menuconfig and build again."
-	make -C buildroot BR2_EXTERNAL=${EXTERNAL_REL_BUILDROOT}
+	make -C buildroot BR2_EXTERNAL=${EXTERNAL_REL_BUILDROOT} FORCE_UNSAFE_CONFIGURE=1
 
 fi
