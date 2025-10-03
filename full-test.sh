@@ -4,6 +4,9 @@
 # steps described in https://github.com/cu-ecen-5013/assignment-autotest/blob/master/README.md#running-tests
 set -e
 
+# symbolic link to ext-tree except dropbear is still not being used, using openssl
+ln -s ext-tree base_external || true
+
 cd `dirname $0`
 test_dir=`pwd`
 echo "starting test with SKIP_BUILD=\"${SKIP_BUILD}\" and DO_VALIDATE=\"${DO_VALIDATE}\""
