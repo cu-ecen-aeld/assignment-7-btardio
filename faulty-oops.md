@@ -1,3 +1,28 @@
+### Fault-Oops Analysis
+
+The kernel oops shows:
+
+The line "faulty_write+0x10/0x20 [faulty]"
+
+Indicates where the oops happened, it is an offset that can be used with a objdump.
+
+Registers x4 and x3, arguments to the function are non-null, meaning the function has two arguments.
+
+x0 the return register is empty, meaning the function didn't complete or is null return.
+
+x8 is empty meaning the function did not make a system call.
+
+There is also page information in there.
+
+#### Misc
+
+According to google AI it was interesting to read:
+
+AArch64-specifics: In the ARMv8 AArch64 architecture, the PC is not one of the general-purpose registers (x0 through x30) and cannot be directly manipulated by normal instructions.
+
+
+
+
 Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
 Mem abort info:
   ESR = 0x0000000096000045
